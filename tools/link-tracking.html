@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>লিংক ট্র্যাকার - LinkMaster</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
+</head>
+<body>
+    <!-- নেভিগেশন বার -->
+    <header class="navbar">
+        <nav class="nav-container">
+            <div class="logo">
+                <a href="../index.html" style="color: inherit; text-decoration: none;">
+                    <span class="logo-icon">🔗</span>
+                    <span class="logo-text">LinkMaster</span>
+                </a>
+            </div>
+            
+            <div class="nav-menu">
+                <a href="../index.html">হোম</a>
+                <a href="../index.html#tools">টুলস</a>
+                <a href="url-shortener.html">URL শর্টেনার</a>
+                <a href="qr-generator.html">QR জেনারেটর</a>
+            </div>
+
+            <div class="nav-actions">
+                <button id="themeToggle" class="theme-btn">🌙</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- মেইন কনটেন্ট -->
+    <main style="max-width: 1200px; margin: 2rem auto; padding: 0 2rem;">
+        <div class="section-header">
+            <h1>লিংক ট্র্যাকার</h1>
+            <p>আপনার লিংকগুলির পারফরম্যান্স ট্র্যাক এবং বিশ্লেষণ করুন</p>
+        </div>
+
+        <!-- ট্র্যাকিং ওভারভিউ -->
+        <div class="overview-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+            <div class="stat-card" style="background: var(--bg-color); padding: 1.5rem; border-radius: 10px; text-align: center; border: 1px solid var(--border-color);">
+                <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">📈</div>
+                <div style="font-size: 2rem; font-weight: bold; color: var(--primary-color);" id="totalClicks">0</div>
+                <div style="color: var(--text-light);">মোট ক্লিক</div>
+            </div>
+            
+            <div class="stat-card" style="background: var(--bg-color); padding: 1.5rem; border-radius: 10px; text-align: center; border: 1px solid var(--border-color);">
+                <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🔗</div>
+                <div style="font-size: 2rem; font-weight: bold; color: var(--secondary-color);" id="totalLinks">0</div>
+                <div style="color: var(--text-light);">ট্র্যাক করা লিংক</div>
+            </div>
+            
+            <div class="stat-card" style="background: var(--bg-color); padding: 1.5rem; border-radius: 10px; text-align: center; border: 1px solid var(--border-color);">
+                <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">👥</div>
+                <div style="font-size: 2rem; font-weight: bold; color: var(--accent-color);" id="uniqueVisitors">0</div>
+                <div style="color: var(--text-light);">ইউনিক ভিজিটর</div>
+            </div>
+            
+            <div class="stat-card" style="background: var(--bg-color); padding: 1.5rem; border-radius: 10px; text-align: center; border: 1px solid var(--border-color);">
+                <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">📱</div>
+                <div style="font-size: 2rem; font-weight: bold; color: var(--success-color);" id="conversionRate">0%</div>
+                <div style="color: var(--text-light);">কনভার্সন রেট</div>
+            </div>
+        </div>
+
+        <!-- মেইন কনটেন্ট গ্রিড -->
+        <div style="display: grid; grid-template-columns: 1fr 400px; gap: 3rem;">
+            <!-- লিংক লিস্ট এবং বিশ্লেষণ -->
+            <div>
+                <!-- লিংক ম্যানেজমেন্ট -->
+                <div class="links-management" style="background: var(--bg-color); padding: 2rem; border-radius: 15px; box-shadow: var(--shadow); margin-bottom: 2rem;">
+                    <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 1.5rem;">
+                        <h3 style="color: var(--text-color);">📋 আপনার লিংকস</h3>
+                        <button id="addTrackedLink" style="padding: 0.7rem 1.5rem; background: var(--primary-color); color: white; border: none; border-radius: 8px; cursor: pointer;">+ নতুন লিংক যোগ করুন</button>
+                    </div>
+
+                    <!-- লিংক ফিল্টার -->
+                    <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                        <input type="text" id="searchLinks" placeholder="লিংক খুঁজুন..." style="flex: 1; min-width: 200px; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: 8px;">
+                        <select id="sortLinks" style="padding: 0.8rem; border: 1px solid var(--border-color); border-radius: 8px;">
+                            <option value="newest">নতুন থেকে পুরানো</option>
+                            <option value="oldest">পুরানো থেকে নতুন</option>
+                            <option value="mostClicks">সবচেয়ে ক্লিক</option>
+                            <option value="leastClicks">সবচেয়ে কম ক্লিক</option>
+                        </select>
+                    </div>
+
+                    <!-- লিংক লিস্ট -->
+                    <div id="linksList" style="max-height: 400px; overflow-y: auto;">
+                        <!-- লিংক আইটেমস এখানে লোড হবে -->
+                        <div style="text-align: center; padding: 3rem; color: var(--text-light);">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">🔍</div>
+                            <p>কোনো ট্র্যাক করা লিংক নেই</p>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">একটি নতুন লিংক যোগ করুন ট্র্যাকিং শুরু করতে</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- এনালিটিক্স চার্ট -->
+                <div class="analytics-chart" style="background: var(--bg-color); padding: 2rem; border-radius: 15px; box-shadow: var(--shadow);">
+                    <h3 style="margin-bottom: 1.5rem; color: var(--text-color);">📈 ক্লিক ট্রেন্ড</h3>
+                    <div id="clickChart" style="height: 300px; background: var(--bg-secondary); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--text-light);">
+                        <p>চার্ট ডেটা লোড হচ্ছে...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ট্র্যাকিং সেটিংস এবং রিয়েল-টাইম ডেটা -->
+            <div>
+                <!-- ট্র্যাকিং সেটিংস -->
+                <div class="tracking-settings" style="background: var(--bg-color); padding: 2rem; border-radius: 15px; box-shadow: var(--shadow); margin-bottom: 2rem;">
+                    <h3 style="margin-bottom: 1.5rem; color: var(--text-color);">⚙️ ট্র্যাকিং সেটিংস</h3>
+                    
+                    <div style="display: grid; gap: 1.5rem;">
+                        <div>
+                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-color);">ট্র্যাকিং মোড</label>
+                            <select id="trackingMode" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: 8px;">
+                                <option value="basic">বেসিক ট্র্যাকিং</option>
+                                <option value="advanced">এডভান্সড ট্র্যাকিং</option>
+                                <option value="full">ফুল ট্র্যাকিং</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                <input type="checkbox" id="trackGeoLocation" checked>
+                                জিওলোকেশন ট্র্যাক করুন
+                            </label>
+                        </div>
+
+                        <div>
+                            <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                <input type="checkbox" id="trackDeviceInfo" checked>
+                                ডিভাইস তথ্য ট্র্যাক করুন
+                            </label>
+                        </div>
+
+                        <div>
+                            <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                <input type="checkbox" id="trackReferrer" checked>
+                                রেফারার ট্র্যাক করুন
+                            </label>
+                        </div>
+
+                        <div>
+                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-color);">ডেটা রিটেনশন</label>
+                            <select id="dataRetention" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: 8px;">
+                                <option value="30">৩০ দিন</option>
+                                <option value="90">৯০ দিন</option>
+                                <option value="365">১ বছর</option>
+                                <option value="0">সবসময়</option>
+                            </select>
+                        </div>
+
+                        <button id="saveSettings" style="padding: 1rem; background: var(--primary-color); color: white; border: none; border-radius: 8px; cursor: pointer;">সেটিংস সেভ করুন</button>
+                    </div>
+                </div>
+
+                <!-- রিয়েল-টাইম অ্যাক্টিভিটি -->
+                <div class="realtime-activity" style="background: var(--bg-color); padding: 2rem; border-radius: 15px; box-shadow: var(--shadow);">
+                    <h3 style="margin-bottom: 1.5rem; color: var(--text-color);">🔄 রিয়েল-টাইম অ্যাক্টিভিটি</h3>
+                    
+                    <div id="activityFeed" style="max-height: 300px; overflow-y: auto;">
+                        <div style="text-align: center; padding: 2rem; color: var(--text-light);">
+                            <p>কোনো রিয়েল-টাইম অ্যাক্টিভিটি নেই</p>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                        <button id="startRealtime" style="flex: 1; padding: 0.7rem; background: var(--success-color); color: white; border: none; border-radius: 5px; cursor: pointer;">রিয়েল-টাইম শুরু করুন</button>
+                        <button id="exportData" style="flex: 1; padding: 0.7rem; background: var(--accent-color); color: white; border: none; border-radius: 5px; cursor: pointer;">ডেটা এক্সপোর্ট</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ডিটেইল্ড এনালিটিক্স -->
+        <div class="detailed-analytics" style="margin-top: 3rem;">
+            <h2 style="text-align: center; margin-bottom: 2rem; color: var(--text-color);">🔍 ডিটেইল্ড এনালিটিক্স</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                <!-- জিওগ্রাফিক ডেটা -->
+                <div style="background: var(--bg-color); padding: 1.5rem; border-radius: 10px; border: 1px solid var(--border-color);">
+                    <h4 style="margin-bottom: 1rem; color: var(--text-color);">🌍 ভিজিটর লোকেশন</h4>
+                    <div id="geoData" style="font-size: 0.9rem;">
+                        <div style="display: flex; justify-content: between; margin-bottom: 0.5rem;">
+                            <span>বাংলাদেশ:</span>
+                            <span style="font-weight: 600;">৬৫%</span>
+                        </div>
+                        <div style="display: flex; justify-content: between; margin-bottom: 0.5rem;">
+                            <span>ভারত:</span>
+                            <span style="font-weight: 600;">২০%</span>
+                        </div>
+                        <div style="display: flex; justify-content: between; margin-bottom: 0.5rem;">
+                            <span>যুক্তরাষ্ট্র:</span>
+                            <span style="font-weight: 600;">১০%</span>
+                        </div>
+                        <div style="display: flex; justify-content: between;">
+                            <span>অন্যান্য:</span>
+                            <span style="font-weight: 600;">৫%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ডিভাইস ডেটা -->
+                <div style="background: var(--bg-color); padding: 1.5rem; border-radius: 10px; border: 1px solid var(--border-color);">
+                    <h4 style="margin-bottom: 1rem; color: var(--text-color);">📱 ডিভাইস তথ্য</h4>
+                    <div id="deviceData" style="font-size: 0.9rem;">
+                        <div style="display: flex; justify-content: between; margin-bottom: 0.5rem;">
+                            <span>মোবাইল:</span>
+                            <span style="font-weight: 600;">৭০%</span>
+                        </div>
+                        <div style="display: flex; justify-content: between; margin-bottom: 0.5rem;">
+                            <span>ডেস্কটপ:</span>
+                            <span style="font-weight: 600;">২৫%</span>
+                        </div>
+                        <div style="display: flex; justify-content: between;">
+                            <span>ট্যাবলেট:</span>
+                            <span style="font-weight: 600;">৫%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- রেফারাল ডেটা -->
+                <div style="background: var(--bg-color); padding: 1.5rem; border-radius: 10px; border: 1px solid var(--border-color);">
+                    <h4 style="margin-bottom: 1rem; color: var(--text-color);">🔗 ট্র্যাফিক সোর্স</h4>
+                    <div id="referralData" style="font-size: 0.9rem;">
+                        <div style="display: flex; justify-content: between; margin-bottom: 0.5rem;">
+                            <span>সোশ্যাল মিডিয়া:</span>
+                            <span style="font-weight: 600;">৪০%</span>
+                        </div>
+                        <div style="display: flex; justify-content: between; margin-bottom: 0.5rem;">
+                            <span>ডাইরেক্ট:</span>
+                            <span style="font-weight: 600;">৩৫%</span>
+                        </div>
+                        <div style="display: flex; justify-content: between;">
+                            <span>সার্চ ইঞ্জিন:</span>
+                            <span style="font-weight: 600;">২৫%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ফুটার -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; ২০২৪ LinkMaster. সকল অধিকার সংরক্ষিত।</p>
+        </div>
+    </footer>
+
+    <script>
+        // লিংক ট্র্যাকিং টুলের জন্য JavaScript
+        class LinkTrackingTool {
+            constructor() {
+                this.trackedLinks = JSON.parse(localStorage.getItem('linkmaster_tracked_links')) || [];
+                this.trackingData = JSON.parse(localStorage.getItem('linkmaster_tracking_data')) || {};
+                this.settings = JSON.parse(localStorage.getItem('linkmaster_tracking_settings')) || this.getDefaultSettings();
+                this.realtimeInterval = null;
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.loadStats();
+                this.loadLinksList();
+                this.loadSettings();
+                this.loadTheme();
+            }
+
+            setupEventListeners() {
+                // নতুন লিংক যোগ করুন
+                document.getElementById('addTrackedLink').addEventListener('click', () => this.showAddLinkModal());
+
+                // ফিল্টার এবং সর্ট
+                document.getElementById('searchLinks').addEventListener('input', (e) => this.filterLinks(e.target.value));
+                document.getElementById('sortLinks').addEventListener('change', (e) => this.sortLinks(e.target.value));
+
+                // সেটিংস
+                document.getElementById('saveSettings').addEventListener('click', () => this.saveSettings());
+
+                // রিয়েল-টাইম
+                document.getElementById('startRealtime').addEventListener('click', () => this.toggleRealtime());
+                document.getElementById('exportData').addEventListener('click', () => this.exportData());
+
+                // থিম টগল
+                document.getElementById('themeToggle').addEventListener('click', () => this.toggleTheme());
+            }
+
+            getDefaultSettings() {
+                return {
+                    trackingMode: 'basic',
+                    trackGeoLocation: true,
+                    trackDeviceInfo: true,
+                    trackReferrer: true,
+                    dataRetention: '30'
+                };
+            }
+
+            loadStats() {
+                const totalClicks = Object.values(this.trackingData).reduce((sum, data) => sum + data.clicks, 0);
+                const totalLinks = this.trackedLinks.length;
+                const uniqueVisitors = this.calculateUniqueVisitors();
+                const conversionRate = this.calculateConversionRate();
+
+                document.getElementById('totalClicks').textContent = totalClicks.toLocaleString();
+                document.getElementById('totalLinks').textContent = totalLinks.toLocaleString();
+                document.getElementById('uniqueVisitors').textContent = uniqueVisitors.toLocaleString();
+                document.getElementById('conversionRate').textContent = conversionRate + '%';
+            }
+
+            calculateUniqueVisitors() {
+                const visitors = new Set();
+                Object.values(this.trackingData).forEach(data => {
+                    data.visits.forEach(visit => {
+                        if (visit.visitorId) {
+                            visitors.add(visit.visitorId);
+                        }
+                    });
+                });
+                return visitors.size;
+            }
+
+            calculateConversionRate() {
+                // সিম্পল কনভার্সন রেট ক্যালকুলেশন
+                const totalClicks = Object.values(this.trackingData).reduce((sum, data) => sum + data.clicks, 0);
+                const conversions = Object.values(this.trackingData).reduce((sum, data) => sum + data.conversions, 0);
+                
+                if (totalClicks === 0) return 0;
+                return Math.round((conversions / totalClicks) * 100);
+            }
+
+            loadLinksList() {
+                const linksList = document.getElementById('linksList');
+                
+                if (this.trackedLinks.length === 0) {
+                    linksList.innerHTML = `
+                        <div style="text-align: center; padding: 3rem; color: var(--text-light);">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">🔍</div>
+                            <p>কোনো ট্র্যাক করা লিংক নেই</p>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">একটি নতুন লিংক যোগ করুন ট্র্যাকিং শুরু করতে</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                linksList.innerHTML = this.trackedLinks.map(link => {
+                    const trackingData = this.trackingData[link.id] || { clicks: 0, conversions: 0 };
+                    const lastClick = trackingData.lastClick ? new Date(trackingData.lastClick).toLocaleDateString('bn-BD') : 'কোনো ক্লিক নেই';
+
+                    return `
+                        <div class="link-item" style="background: var(--bg-secondary); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px so
