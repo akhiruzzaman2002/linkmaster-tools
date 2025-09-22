@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR কোড জেনারেটর - LinkMaster</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📱</text></svg>">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+</head>
+<body>
+    <!-- নেভিগেশন বার -->
+    <header class="navbar">
+        <nav class="nav-container">
+            <div class="logo">
+                <a href="../index.html" style="color: inherit; text-decoration: none;">
+                    <span class="logo-icon">🔗</span>
+                    <span class="logo-text">LinkMaster</span>
+                </a>
+            </div>
+            
+            <div class="nav-menu">
+                <a href="../index.html">হোম</a>
+                <a href="../index.html#tools">টুলস</a>
+                <a href="url-shortener.html">URL শর্টেনার</a>
+                <a href="bio-links.html">বায়ো লিংক</a>
+            </div>
+
+            <div class="nav-actions">
+                <button id="themeToggle" class="theme-btn">🌙</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- মেইন কনটেন্ট -->
+    <main style="max-width: 1000px; margin: 2rem auto; padding: 0 2rem;">
+        <div class="section-header">
+            <h1>QR কোড জেনারেটর</h1>
+            <p>যেকোনো URL, টেক্সট বা তথ্যের জন্য QR কোড তৈরি করুন</p>
+        </div>
+
+        <!-- QR জেনারেটর ফর্ম -->
+        <div class="qr-generator-box" style="background: var(--bg-color); padding: 2rem; border-radius: 15px; box-shadow: var(--shadow);">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;">
+                <!-- ইনপুট সেকশন -->
+                <div>
+                    <h3 style="margin-bottom: 1.5rem; color: var(--text-color);">QR কোড তৈরি করুন</h3>
+                    
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-color);">কনটেন্ট টাইপ</label>
+                        <select id="contentType" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-color); color: var(--text-color);">
+                            <option value="url">URL/ওয়েবসাইট</option>
+                            <option value="text">টেক্সট</option>
+                            <option value="email">ইমেইল</option>
+                            <option value="phone">ফোন নাম্বার</option>
+                            <option value="wifi">Wi-Fi</option>
+                            <option value="vcard">কন্টাক্ট কার্ড</option>
+                        </select>
+                    </div>
+
+                    <div id="urlInput" class="content-input">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-color);">ওয়েবসাইট URL</label>
+                        <input type="url" id="urlContent" placeholder="https://example.com" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: 8px;">
+                    </div>
+
+                    <div id="textInput" class="content-input" style="display: none;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;
