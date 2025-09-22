@@ -6,8 +6,7 @@
     <title>LinkMaster - ফ্রি লিংক ম্যানেজমেন্ট টুলস</title>
     <meta name="description" content="URL শর্টেন, QR কোড তৈরি, লিংক ট্র্যাকিং - সবকিছু ফ্রিতে">
     <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" href="assets/images/icon-192.png">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔗</text></svg>">
 </head>
 <body>
     <!-- লোডিং স্ক্রিন -->
@@ -24,20 +23,19 @@
     <header class="navbar">
         <nav class="nav-container">
             <div class="logo">
-                <img src="assets/images/logo.png" alt="LinkMaster Logo" class="logo-img">
+                <span class="logo-icon">🔗</span>
                 <span class="logo-text">LinkMaster</span>
             </div>
             
             <div class="nav-menu">
                 <a href="#home" class="nav-link">হোম</a>
-                <a href="#features" class="nav-link">ফিচারস</a>
                 <a href="#tools" class="nav-link">টুলস</a>
-                <a href="dashboard.html" class="nav-link">ড্যাশবোর্ড</a>
+                <a href="#about" class="nav-link">সম্পর্কে</a>
+                <a href="#contact" class="nav-link">যোগাযোগ</a>
             </div>
 
             <div class="nav-actions">
                 <button id="themeToggle" class="theme-btn">🌙</button>
-                <button id="installBtn" class="install-btn" style="display:none;">📱 অ্যাপ ইনস্টল</button>
             </div>
         </nav>
     </header>
@@ -48,23 +46,23 @@
         <section id="home" class="hero-section">
             <div class="hero-content">
                 <h1 class="hero-title">আপনার লিংকগুলিকে করুন স্মার্ট</h1>
-                <p class="hero-subtitle">URL শর্টেন, QR কোড জেনারেট, ক্লিক ট্র্যাকিং - সবকিছু এক জায়গায়</p>
+                <p class="hero-subtitle">URL শর্টেন, QR কোড জেনারেট, লিংক ট্র্যাকিং - সবকিছু এক জায়গায়</p>
                 
                 <!-- মেইন URL শর্টেনার -->
                 <div class="url-shortener-box">
                     <div class="input-group">
-                        <input type="url" id="longUrl" placeholder="https://example.com/very-long-url..." required>
+                        <input type="url" id="longUrl" placeholder="আপনার লং URL এখানে লিখুন..." required>
                         <button id="shortenBtn" class="btn-shorten">শর্টেন করুন</button>
                     </div>
                     <div id="shortUrlResult" class="result-box">
                         <div class="short-url">
                             <span id="shortUrl" class="short-url-text">https://lnkmstr.com/abc123</span>
-                            <button id="copyBtn" class="btn-copy">📋 কপি</button>
+                            <button id="copyBtn" class="btn-copy">কপি</button>
                         </div>
                         <div class="url-actions">
-                            <button id="qrBtn" class="btn-qr">📱 QR কোড</button>
-                            <button id="shareBtn" class="btn-share">🔗 শেয়ার</button>
-                            <button id="saveBtn" class="btn-save">💾 সেভ করুন</button>
+                            <button id="qrBtn" class="btn-qr">QR কোড</button>
+                            <button id="shareBtn" class="btn-share">শেয়ার</button>
+                            <button id="saveBtn" class="btn-save">সেভ করুন</button>
                         </div>
                     </div>
                 </div>
@@ -95,47 +93,44 @@
             </div>
 
             <div class="tools-grid">
-                <div class="tool-card" data-tool="url-shortener">
+                <div class="tool-card">
                     <div class="tool-icon">✂️</div>
                     <h3>URL শর্টেনার</h3>
                     <p>লং URLs কে ছোট করুন</p>
-                    <a href="tools/url-shortener.html" class="tool-link">ব্যবহার করুন →</a>
+                    <button class="tool-link" onclick="openTool('url-shortener')">ব্যবহার করুন</button>
                 </div>
 
-                <div class="tool-card" data-tool="qr-generator">
+                <div class="tool-card">
                     <div class="tool-icon">📱</div>
                     <h3>QR কোড জেনারেটর</h3>
                     <p>URL থেকে QR কোড তৈরি করুন</p>
-                    <a href="tools/qr-generator.html" class="tool-link">ব্যবহার করুন →</a>
+                    <button class="tool-link" onclick="openTool('qr-generator')">ব্যবহার করুন</button>
                 </div>
 
-                <div class="tool-card" data-tool="bio-links">
+                <div class="tool-card">
                     <div class="tool-icon">👤</div>
                     <h3>বায়ো লিংক ক্রিয়েটর</h3>
                     <p>পার্সোনাল বায়ো পেজ তৈরি করুন</p>
-                    <a href="tools/bio-links.html" class="tool-link">ব্যবহার করুন →</a>
+                    <button class="tool-link" onclick="openTool('bio-links')">ব্যবহার করুন</button>
                 </div>
 
-                <div class="tool-card" data-tool="link-tracking">
+                <div class="tool-card">
                     <div class="tool-icon">📊</div>
                     <h3>লিংক ট্র্যাকার</h3>
                     <p>ক্লিক ডেটা ট্র্যাক করুন</p>
-                    <a href="tools/link-tracking.html" class="tool-link">ব্যবহার করুন →</a>
+                    <button class="tool-link" onclick="openTool('link-tracking')">ব্যবহার করুন</button>
                 </div>
+            </div>
+        </section>
 
-                <div class="tool-card" data-tool="bulk-links">
-                    <div class="tool-icon">📦</div>
-                    <h3>বাল্ক লিংক টুল</h3>
-                    <p>একসাথে অনেক লিংক ম্যানেজ করুন</p>
-                    <a href="tools/bulk-links.html" class="tool-link">ব্যবহার করুন →</a>
-                </div>
-
-                <div class="tool-card" data-tool="password-generator">
-                    <div class="tool-icon">🔒</div>
-                    <h3>পাসওয়ার্ড জেনারেটর</h3>
-                    <p>সিকিউর পাসওয়ার্ড তৈরি করুন</p>
-                    <a href="tools/password-generator.html" class="tool-link">ব্যবহার করুন →</a>
-                </div>
+        <!-- সম্পর্কে সেকশন -->
+        <section id="about" class="about-section">
+            <div class="section-header">
+                <h2>LinkMaster সম্পর্কে</h2>
+                <p>আমাদের লক্ষ্য আপনার লিংক ম্যানেজমেন্টকে সহজ করা</p>
+            </div>
+            <div class="about-content">
+                <p>LinkMaster একটি ফ্রি ওপেন-সোর্স টুলস প্ল্যাটফর্ম যেখানে আপনি সব ধরনের লিংক সম্পর্কিত টুলস পাবেন।</p>
             </div>
         </section>
     </main>
@@ -143,41 +138,10 @@
     <!-- ফুটার -->
     <footer class="footer">
         <div class="footer-content">
-            <div class="footer-section">
-                <div class="footer-logo">
-                    <img src="assets/images/logo.png" alt="LinkMaster" class="footer-logo-img">
-                    <span class="footer-logo-text">LinkMaster</span>
-                </div>
-                <p class="footer-desc">আপনার লিংক ম্যানেজমেন্টের বিশ্বস্ত পার্টনার</p>
-            </div>
-
-            <div class="footer-section">
-                <h3 class="footer-title">দ্রুত লিংক</h3>
-                <ul class="footer-links">
-                    <li><a href="#home">হোম</a></li>
-                    <li><a href="#features">ফিচারস</a></li>
-                    <li><a href="#tools">টুলস</a></li>
-                    <li><a href="dashboard.html">ড্যাশবোর্ড</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-section">
-                <h3 class="footer-title">সাপোর্ট</h3>
-                <ul class="footer-links">
-                    <li><a href="docs/privacy-policy.html">প্রাইভেসি পলিসি</a></li>
-                    <li><a href="#contact">যোগাযোগ</a></li>
-                    <li><a href="#about">আমাদের সম্পর্কে</a></li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
             <p>&copy; ২০২৪ LinkMaster. সকল অধিকার সংরক্ষিত।</p>
         </div>
     </footer>
 
-    <!-- স্ক্রিপ্টস -->
     <script src="script.js"></script>
-    <script src="assets/js/auth.js"></script>
 </body>
-</html>
+                    </html>
