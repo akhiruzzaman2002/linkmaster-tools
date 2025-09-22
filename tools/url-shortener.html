@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL শর্টেনার - LinkMaster</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✂️</text></svg>">
+</head>
+<body>
+    <!-- নেভিগেশন বার -->
+    <header class="navbar">
+        <nav class="nav-container">
+            <div class="logo">
+                <a href="../index.html" style="color: inherit; text-decoration: none;">
+                    <span class="logo-icon">🔗</span>
+                    <span class="logo-text">LinkMaster</span>
+                </a>
+            </div>
+            
+            <div class="nav-menu">
+                <a href="../index.html">হোম</a>
+                <a href="../index.html#tools">টুলস</a>
+                <a href="qr-generator.html">QR জেনারেটর</a>
+                <a href="bio-links.html">বায়ো লিংক</a>
+            </div>
+
+            <div class="nav-actions">
+                <button id="themeToggle" class="theme-btn">🌙</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- মেইন কনটেন্ট -->
+    <main style="max-width: 800px; margin: 2rem auto; padding: 0 2rem;">
+        <div class="section-header">
+            <h1>URL শর্টেনার</h1>
+            <p>লং URLs কে ছোট এবং শেয়ারযোগ্য লিংক এ পরিণত করুন</p>
+        </div>
+
+        <!-- URL শর্টেনার বক্স -->
+        <div class="url-shortener-box" style="background: var(--bg-color); color: var(--text-color);">
+            <div class="input-group">
+                <input type="url" id="longUrl" placeholder="https://example.com/very-long-url-here..." required>
+                <button id="shortenBtn" class="btn-shorten">শর্টেন করুন</button>
+            </div>
+            
+            <!-- এডভান্সড অপশনস -->
+            <div class="advanced-options" style="margin: 1.5rem 0; padding: 1rem; background: var(--bg-secondary); border-radius: 10px;">
+                <h3 style="margin-bottom: 1rem;">এডভান্সড অপশনস</h3>
+                
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <label style="display: flex; align-items: center; gap: 0.5rem;">
+                        <input type="checkbox" id="customSlug"> কাস্টম স্লাগ ব্যবহার করুন
+                    </label>
+                    
+                    <label style="display: flex; align-items: center; gap: 0.5rem;">
+                        <input type="checkbox" id="setExpiry"> এক্সপাইরি ডেট সেট করুন
+                    </label>
+                </div>
+
+                <div id="slugInput" style="display: none; margin-top: 1rem;">
+                    <input type="text" id="customSlugValue" placeholder="আপনার কাস্টম স্লাগ (ইংরেজিতে)" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: 5px;">
+                </div>
+
+                <div id="expiryInput" style="display: none; margin-top: 1rem;">
+                    <select id="expiryTime" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: 5px;">
+                        <option value="1">১ দিন</option>
+                        <option value="7">৭ দিন</option>
+                        <option value="30">৩০ দিন</option>
+                        <option value="365">১ বছর</option>
+                        <option value="0">কখনো না</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div id="shortUrlResult" class="result-box" style="background: var(--bg-secondary);">
+                <div class="short-url">
+                    <span id="shortUrl" class="short-url-text" style="color: var(--text-color);">https://lnkmstr.com/abc123</span>
+                    <button id="copyBtn" class="btn-copy" style="background: var(--primary-color); color: white;">কপি</button>
+                </div>
+                <div class="url-actions">
+                    <button id="qrBtn" class="btn-qr" style="background: var(--secondary-color); color: white;">QR কোড</button>
+                    <button id="shareBtn" class="btn-share" style="background: var(--accent-color); color: white;">শেয়ার</button>
+                    <button id="saveBtn" class="btn-save" style="background: #10b981; color: white;">সেভ করুন</button>
+                    <button id="analyticsBtn" class="btn-analytics" style="background: #f59e0b; color: white;">এনালিটিক্স</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- রিসেন্ট লিংকস -->
+        <div class="recent-links" style="margin-top: 3rem;">
+            <h2 style="margin-bottom: 1.5rem;">আপনার সাম্প্রতিক লিংকস</h2>
+            <div id="recentLinksList">
+                <!-- রিসেন্ট লিংকস এখানে লোড হবে -->
+                <div style="text-align: center; padding: 2rem; color: var(--text-light);">
+                    <p>কোনো লিংক তৈরি করা হয়নি। উপরে একটি URL শর্টেন করুন!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ফিচারস সেকশন -->
+        <div class="features-section" style="margin-top: 4rem;">
+            <h2 style="margin-bottom: 1.5rem;">কেন আমাদের URL শর্টেনার ব্যবহার করবেন?</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+                <div style="padding: 1.5rem; background: var(--bg-secondary); border-radius: 10px;">
+                    <h3 style="color: var(--primary-color); margin-bottom: 1rem;">⚡ দ্রুত</h3>
+                    <p>মাত্র কয়েক সেকেন্ডে আপনার লিংক শর্টেন করুন</p>
+                </div>
+                
+                <div style="padding: 1.5rem; background: var(--bg-secondary); border-radius: 10px;">
+                    <h3 style="color: var(--primary-color); margin-bottom: 1rem;">🔒 নিরাপদ</h3>
+                    <p>সমস্ত লিংক HTTPS সিকিউরিটি সহ</p>
+                </div>
+                
+                <div style="padding: 1.5rem; background: var(--bg-secondary); border-radius: 10px;">
+                    <h3 style="color: var(--primary-color); margin-bottom: 1rem;">📊 এনালিটিক্স</h3>
+                    <p>ক্লিক ডেটা ট্র্যাক এবং বিশ্লেষণ করুন</p>
+                </div>
+                
+                <div style="padding: 1.5rem; background: var(--bg-secondary); border-radius: 10px;">
+                    <h3 style="color: var(--primary-color); margin-bottom: 1rem;">💯 ফ্রি</h3>
+                    <p>কোনো খরচ নেই, সম্পূর্ণ বিনামূল্যে</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- কিভাবে ব্যবহার করবেন -->
+        <div class="how-to-use" style="margin-top: 4rem;">
+            <h2 style="margin-bottom: 1.5rem;">কিভাবে ব্যবহার করবেন?</h2>
+            
+            <div style="display: grid; gap: 1.5rem;">
+                <div style="display: flex; gap: 1rem; align-items: start;">
+                    <span style="background: var(--primary-color); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">1</span>
+                    <div>
+                        <h3 style="margin-bottom: 0.5rem;">URL পেস্ট করুন</h3>
+                        <p>উপরের বক্সে আপনার লং URL টি পেস্ট করুন</p>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 1rem; align-items: start;">
+                    <span style="background: var(--primary-color); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">2</span>
+                    <div>
+                        <h3 style="margin-bottom: 0.5rem;">শর্টেন করুন</h3>
+                        <p>"শর্টেন করুন" বাটনে ক্লিক করুন</p>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 1rem; align-items: start;">
+                    <span style="background: var(--primary-color); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">3</span>
+                    <div>
+                        <h3 style="margin-bottom: 0.5rem;">ব্যবহার করুন</h3>
+                        <p>শর্টেন্ড লিংক কপি, শেয়ার বা সেভ করুন</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ফুটার -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; ২০২৪ LinkMaster. সকল অধিকার সংরক্ষিত।</p>
+        </div>
+    </footer>
+
+    <script>
+        // URL শর্টেনার টুলের জন্য স্পেসিফিক JavaScript
+        class URLShortenerTool {
+            constructor() {
+                this.links = JSON.parse(localStorage.getItem('linkmaster_links')) || [];
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.loadRecentLinks();
+                this.loadTheme();
+            }
+
+            setupEventListeners() {
+                // শর্টেন বাটন
+                document.getElementById('shortenBtn').addEventListener('click', () => this.shortenUrl());
+                
+                // URL ইনপুট এন্টার key
+                document.getElementById('longUrl').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.shortenUrl();
+                });
+
+                // কাস্টম স্লাগ টগল
+                document.getElementById('customSlug').addEventListener('change', (e) => {
+                    document.getElementById('slugInput').style.display = e.target.checked ? 'block' : 'none';
+                });
+
+                // এক্সপাইরি টগল
+                document.getElementById('setExpiry').addEventListener('change', (e) => {
+                    document.getElementById('expiryInput').style.display = e.target.checked ? 'block' : 'none';
+                });
+
+                // অ্যাকশন বাটনস
+                document.getElementById('copyBtn').addEventListener('click', () => this.copyToClipboard());
+                document.getElementById('qrBtn').addEventListener('click', () => this.generateQR());
+                document.getElementById('shareBtn').addEventListener('click', () => this.shareUrl());
+                document.getElementById('saveBtn').addEventListener('click', () => this.saveLink());
+                document.getElementById('analyticsBtn').addEventListener('click', () => this.showAnalytics());
+
+                // থিম টগল
+                document.getElementById('themeToggle').addEventListener('click', () => this.toggleTheme());
+            }
+
+            shortenUrl() {
+                const longUrl = document.getElementById('longUrl').value.trim();
+                const useCustomSlug = document.getElementById('customSlug').checked;
+                const customSlug = document.getElementById('customSlugValue').value.trim();
+                const setExpiry = document.getElementById('setExpiry').checked;
+                const expiryTime = document.getElementById('expiryTime').value;
+
+                if (!this.isValidUrl(longUrl)) {
+                    this.showNotification('দয়া করে একটি বৈধ URL দিন', 'error');
+                    return;
+                }
+
+                if (useCustomSlug && !customSlug) {
+                    this.showNotification('কাস্টম স্লাগ দিন', 'error');
+                    return;
+                }
+
+                if (useCustomSlug && !this.isValidSlug(customSlug)) {
+                    this.showNotification('স্লাগ শুধুমাত্র ইংরেজি অক্ষর এবং সংখ্যা থাকতে পারে', 'error');
+                    return;
+                }
+
+                this.showLoadingState();
+
+                setTimeout(() => {
+                    const shortUrl = this.generateShortUrl(customSlug);
+                    this.displayShortUrl(shortUrl);
+                    
+                    // লিংক সেভ করুন
+                    const linkData = {
+                        id: Date.now(),
+                        longUrl: longUrl,
+                        shortUrl: shortUrl,
+                        customSlug: useCustomSlug ? customSlug : null,
+                        expiry: setExpiry ? this.calculateExpiryDate(expiryTime) : null,
+                        clicks: 0,
+                        createdAt: new Date().toLocaleString('bn-BD')
+                    };
+
+                    this.links.unshift(linkData);
+                    localStorage.setItem('linkmaster_links', JSON.stringify(this.links));
+                    
+                    this.hideLoadingState();
+                    this.loadRecentLinks();
+                    this.showNotification('লিংক সফলভাবে শর্টেন করা হয়েছে!', 'success');
+                }, 1500);
+            }
+
+            isValidUrl(url) {
+                try {
+                    if (!url) return false;
+                    if (!url.includes('.') || url.length < 5) return false;
+                    
+                    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                        url = 'https://' + url;
+                        document.getElementById('longUrl').value = url;
+                    }
+                    
+                    new URL(url);
+                    return true;
+                } catch {
+                    return false;
+                }
+            }
+
+            isValidSlug(slug) {
+                return /^[a-zA-Z0-9_-]+$/.test(slug);
+            }
+
+            generateShortUrl(customSlug = null) {
+                if (customSlug) {
+                    return `https://lnkmstr.com/${customSlug}`;
+                }
+                
+                const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                let slug = '';
+                for (let i = 0; i < 6; i++) {
+                    slug += characters.charAt(Math.floor(Math.random() * characters.length));
+                }
+                return `https://lnkmstr.com/${slug}`;
+            }
+
+            calculateExpiryDate(days) {
+                const expiryDate = new Date();
+                expiryDate.setDate(expiryDate.getDate() + parseInt(days));
+                return expiryDate.toLocaleDateString('bn-BD');
+            }
+
+            displayShortUrl(shortUrl) {
+                document.getElementById('shortUrl').textContent = shortUrl;
+                document.getElementById('shortUrlResult').style.display = 'block';
+            }
+
+            copyToClipboard() {
+                const shortUrl = document.getElementById('shortUrl').textContent;
+                navigator.clipboard.writeText(shortUrl).then(() => {
+                    this.showNotification('লিংক কপি করা হয়েছে!', 'success');
+                });
+            }
+
+            generateQR() {
+                const shortUrl = document.getElementById('shortUrl').textContent;
+                window.open(`qr-generator.html?url=${encodeURIComponent(shortUrl)}`, '_blank');
+            }
+
+            shareUrl() {
+                const shortUrl = document.getElementById('shortUrl').textContent;
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'LinkMaster শর্টেন্ড লিংক',
+                        text: 'এই লিংকটি দেখুন:',
+                        url: shortUrl
+                    });
+                } else {
+                    this.copyToClipboard();
+                }
+            }
+
+            saveLink() {
+                this.showNotification('লিংক সেভ করা হয়েছে!', 'success');
+            }
+
+            showAnalytics() {
+                this.showNotification('এনালিটিক্স শীঘ্রই আসছে!', 'info');
+            }
+
+            loadRecentLinks() {
+                const recentLinksList = document.getElementById('recentLinksList');
+                const recentLinks = this.links.slice(0, 5); // শেষের ৫টি লিংক
+
+                if (recentLinks.length === 0) {
+                    recentLinksList.innerHTML = `
+                        <div style="text-align: center; padding: 2rem; color: var(--text-light);">
+                            <p>কোনো লিংক তৈরি করা হয়নি। উপরে একটি URL শর্টেন করুন!</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                recentLinksList.innerHTML = recentLinks.map(link => `
+                    <div style="border: 1px solid var(--border-color); border-radius: 10px; padding: 1rem; margin-bottom: 1rem; background: var(--bg-color);">
+                        <div style="display: flex; justify-content: between; align-items: start; gap: 1rem; margin-bottom: 0.5rem;">
+                            <div style="flex: 1;">
+                                <strong style="color: var(--primary-color);">${link.shortUrl}</strong>
+                                <div style="font-size: 0.9rem; color: var(--text-light); margin-top: 0.25rem;">
+                                    ${link.longUrl.length > 50 ? link.longUrl.substring(0, 50) + '...' : link.longUrl}
+                                </div>
+                            </div>
+                            <span style="background: var(--bg-secondary); padding: 0.25rem 0.5rem; border-radius: 5px; font-size: 0.8rem;">
+                                ${link.clicks} ক্লিক
+                            </span>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; font-size: 0.8rem; color: var(--text-light);">
+                            <span>তৈরি: ${link.createdAt}</span>
+                            ${link.expiry ? `<span>মেয়াদ: ${link.expiry}</span>` : ''}
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    padding: 1rem 1.5rem;
+                    border-radius: 8px;
+                    color: white;
+                    z-index: 1000;
+                    max-width: 300px;
+                    animation: slideIn 0.3s ease;
+                    font-weight: 500;
+                    background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
+                `;
+                notification.textContent = message;
+                document.body.appendChild(notification);
+
+                setTimeout(() => {
+                    notification.remove();
+                }, 3000);
+            }
+
+            showLoadingState() {
+                const button = document.getElementById('shortenBtn');
+                button.textContent = 'শর্টেন হচ্ছে...';
+                button.disabled = true;
+            }
+
+            hideLoadingState() {
+                const button = document.getElementById('shortenBtn');
+                button.textContent = 'শর্টেন করুন';
+                button.disabled = false;
+            }
+
+            toggleTheme() {
+                const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('linkmaster_theme', newTheme);
+                
+                const themeBtn = document.getElementById('themeToggle');
+                themeBtn.textContent = newTheme === 'light' ? '🌙' : '☀️';
+            }
+
+            loadTheme() {
+                const savedTheme = localStorage.getItem('linkmaster_theme') || 'light';
+                document.documentElement.setAttribute('data-theme', savedTheme);
+                const themeBtn = document.getElementById('themeToggle');
+                themeBtn.textContent = savedTheme === 'light' ? '🌙' : '☀️';
+            }
+        }
+
+     
