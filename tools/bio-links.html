@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>বায়ো লিংক ক্রিয়েটর - LinkMaster</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👤</text></svg>">
+</head>
+<body>
+    <!-- নেভিগেশন বার -->
+    <header class="navbar">
+        <nav class="nav-container">
+            <div class="logo">
+                <a href="../index.html" style="color: inherit; text-decoration: none;">
+                    <span class="logo-icon">🔗</span>
+                    <span class="logo-text">LinkMaster</span>
+                </a>
+            </div>
+            
+            <div class="nav-menu">
+                <a href="../index.html">হোম</a>
+                <a href="../index.html#tools">টুলস</a>
+                <a href="url-shortener.html">URL শর্টেনার</a>
+                <a href="qr-generator.html">QR জেনারেটর</a>
+            </div>
+
+            <div class="nav-actions">
+                <button id="themeToggle" class="theme-btn">🌙</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- মেইন কনটেন্ট -->
+    <main style="max-width: 1200px; margin: 2rem auto; padding: 0 2rem;">
+        <div class="section-header">
+            <h1>বায়ো লিংক ক্রিয়েটর</h1>
+            <p>একটি পেজে সব আপনার গুরুত্বপূর্ণ লিংক যোগ করুন</p>
+        </div>
+
+        <!-- বায়ো লিংক এডিটর -->
+        <div style="display: grid; grid-template-columns: 1fr 400px; gap: 3rem;">
+            <!-- এডিটর সেকশন -->
+            <div>
+                <div class="editor-box" style="background: var(--bg-color); padding: 2rem; border-radius: 15px; box-shadow: var(--shadow); margin-bottom: 2rem;">
+                    <h3 style="margin-bottom: 1.5rem; color: var(--text-color);">আপনার বায়ো লিংক কাস্টমাইজ করুন</h3>
+                    
+                    <!-- প্রোফাইল তথ্য -->
+                    <div class="profile-section" style="margin-bottom: 2rem;">
+                        <h4 style="margin-bottom: 1rem; color: var(--text-color);">👤 প্রোফাইল তথ্য</h4>
+                        
+                        <div style="display: grid; gap: 1rem;">
+                            <div>
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-color);">প্রোফাইল ছবি</label>
+                                <input type="file" id="profileImage" accept="image/*" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: 8px;">
+                                <button id="removeImage" style="margin-top: 0.5rem; padding: 0.5rem 1rem; background: var(--error-color); color: white; border: none; border-radius: 5px; cursor: pointer; display: none;">ছবি সরান</button>
+                            </div>
+                            
+                            <div>
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-color);">নাম</label>
+                                <input type="text" id="profileName" placeholder="আপনার নাম" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: 8px;">
+                            </div>
+                            
+                            <div>
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-color);">বায়ো/বিবরণ</label>
+                                <textarea id="profileBio" placeholder="আপনার সংক্ষিপ্ত পরিচয়..." rows="3" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: 8px; resize: vertical;"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- লিংক সেকশন -->
+                    <div class="links-section">
+                        <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 1rem;">
+                            <h4 style="color: var(--text-color);">🔗 লিংকস</h4>
+                            <button id="addLinkBtn" style="padding: 0.5rem 1rem; background: var(--primary-color); color: white; border: none; border-radius: 5px; cursor: pointer;">+ লিংক যোগ করুন</button>
+                        </div>
+                        
+                        <div id="linksContainer">
+                            <!-- লিংক আইটেমস এখানে যোগ হবে -->
+                            <div class="link-item" style="background: var(--bg-secondary); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                                <div style="display: grid; gap: 1rem;">
+                                    <div>
+                                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-color);">লিংক টাইটেল</label>
+                                        <input type="text" class="link-title" placeholder="যেমন: আমার ওয়েবসাইট" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: 8px;">
+                                    </div>
+                                    
+                                    <div>
+                                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-color);">URL</label>
+                                        <input type="url" class="link-url" placeholder="https://example.com" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: 8px;">
+                                    </div>
+                                    
+                                    <div style="display: flex; gap: 0.5rem;">
+                                        <button class="move-up-btn" style="padding: 0.5rem; background: var(--accent-color); color: white; border: none; border-radius: 5px; cursor: pointer;">⬆️</button>
+                                        <button class="move-down-btn" style="padding: 0.5rem; background: var(--accent-color); color: white; border: none; border-radius: 5px; cursor: pointer;">⬇️</button>
+                                        <button class="remove-link-btn" style="padding: 0.5rem; background: var(--error-color); color: white; border: none; border-radius: 5px; cursor: pointer;">🗑️</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- থিম সেকশন -->
+                    <div class="theme-section" style="margin-top: 2rem;">
+                        <h4 style="margin-bottom: 1rem; color: var(--text-color);">🎨 থিম সেটিংস</h4>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+                            <div>
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-color);">প্রধান রং</label>
+                                <input type="color" id="primaryColor" value="#2563eb" style="width: 100%; height: 40px; border: 1px solid var(--border-color); border-radius: 8px;">
+                            </div>
+                            
+                            <div>
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-color);">ব্যাকগ্রাউন্ড</label>
+                                <input type="color" id="backgroundColor" value="#ffffff" style="width: 100%; height: 40px; border: 1px solid var(--border-color); border-radius: 8px;">
+                            </div>
+                            
+                            <div>
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-color);">বাটন স্টাইল</label>
+                                <select id="buttonStyle" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: 8px;">
+                                    <option value="rounded">গোলাকার</option>
+                                    <option value="square">চতুর্ভুজ</option>
+                                    <option value="outline">আউটলাইন</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- সেভ বাটন -->
+                    <div style="margin-top: 2rem; text-align: center;">
+                        <button id="saveBioLink" style="padding: 1rem 2rem; background: var(--success-color); color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer;">বায়ো লিংক সেভ করুন</button>
+                    </div>
+                </div>
+
+                <!-- শেয়ার অপশনস -->
+                <div class="share-options" style="background: var(--bg-color); padding: 2rem; border-radius: 15px; box-shadow: var(--shadow);">
+                    <h3 style="margin-bottom: 1.5rem; color: var(--text-color);">📤 শেয়ার করুন</h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <button id="copyLinkBtn" style="padding: 1rem; background: var(--primary-color); color: white; border: none; border-radius: 8px; cursor: pointer;">🔗 লিংক কপি করুন</button>
+                        <button id="downloadQRBtn" style="padding: 1rem; background: var(--secondary-color); color: white; border: none; border-radius: 8px; cursor: pointer;">📱 QR কোড ডাউনলোড</button>
+                        <button id="shareSocialBtn" style="padding: 1rem; background: var(--accent-color); color: white; border: none; border-radius: 8px; cursor: pointer;">📢 সোশ্যাল মিডিয়া</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- প্রিভিউ সেকশন -->
+            <div>
+                <div class="preview-box" style="position: sticky; top: 2rem;">
+                    <h3 style="margin-bottom: 1.5rem; color: var(--text-color); text-align: center;">📱 লাইভ প্রিভিউ</h3>
+                    
+                    <div id="bioPreview" style="background: white; border-radius: 20px; padding: 2rem; box-shadow: 0 10px 30px rgba(0,0,0,0.1); min-height: 600px; border: 1px solid var(--border-color);">
+                        <!-- প্রোফাইল হেডার -->
+                        <div style="text-align: center; margin-bottom: 2rem;">
+                            <img id="previewImage" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23%23e5e7eb'/%3E%3Ctext x='50' y='60' text-anchor='middle' font-size='40' fill='%23%239ca3af'%3E👤%3C/text%3E%3C/svg%3E" 
+                                 alt="Profile" style="width: 100px; height: 100px; border-radius: 50%; margin-bottom: 1rem; border: 3px solid #2563eb;">
+                            <h2 id="previewName" style="color: #1f2937; margin-bottom: 0.5rem;">আপনার নাম</h2>
+                            <p id="previewBio" style="color: #6b7280; line-height: 1.5;">আপনার সংক্ষিপ্ত পরিচয় এখাবে দেখানো হবে</p>
+                        </div>
+
+                        <!-- লিংক বাটনস -->
+                        <div id="previewLinks" style="display: grid; gap: 1rem;">
+                            <div class="link-button" style="background: #2563eb; color: white; padding: 1rem; border-radius: 12px; text-align: center; text-decoration: none; display: block; transition: all 0.3s;">
+                                <strong>নমুনা লিংক</strong>
+                                <div style="font-size: 0.8rem; opacity: 0.8;">example.com</div>
+                            </div>
+                        </div>
+
+                        <!-- ফুটার -->
+                        <div style="text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #e5e7eb;">
+                            <p style="color: #9ca3af; font-size: 0.8rem;">LinkMaster বায়ো লিংক দ্বারা তৈরি</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- টেমপ্লেট গ্যালারি -->
+        <div class="templates-section" style="margin-top: 4rem;">
+            <h2 style="text-align: center; margin-bottom: 2rem; color: var(--text-color);">🎨 প্রি-মেড টেমপ্লেটস</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                <div class="template-card" data-template="modern" style="background: var(--bg-color); padding: 1.5rem; border-radius: 15px; text-align: center; cursor: pointer; border: 2px solid var(--border-color); transition: all 0.3s;">
+                    <div style="width: 100%; height: 150px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 10px; margin-bottom: 1rem;"></div>
+                    <h4>মডার্ন</h4>
+                    <p style="color: var(--text-light);">ক্লিন এবং প্রফেশনাল ডিজাইন</p>
+                </div>
+                
+                <div class="template-card" data-template="minimal" style="background: var(--bg-color); padding: 1.5rem; border-radius: 15px; text-align: center; cursor: pointer; border: 2px solid var(--border-color); transition: all 0.3s;">
+                    <div style="width: 100%; height: 150px; background: linear-gradient(135deg, #f093fb, #f5576c); border-radius: 10px; margin-bottom: 1rem;"></div>
+                    <h4>মিনিমাল</h4>
+                    <p style="color: var(--text-light);">সিম্পল এবং এলিগেন্ট</p>
+                </div>
+                
+                <div class="template-card" data-template="dark" style="background: var(--bg-color); padding: 1.5rem; border-radius: 15px; text-align: center; cursor: pointer; border: 2px solid var(--border-color); transition: all 0.3s;">
+                    <div style="width: 100%; height: 150px; background: linear-gradient(135deg, #2c3e50, #4ca1af); border-radius: 10px; margin-bottom: 1rem;"></div>
+                    <h4>ডার্ক</h4>
+                    <p style="color: var(--text-light);">ডার্ক মোড ফ্রেন্ডলি</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ফুটার -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; ২০২৪ LinkMaster. সকল অধিকার সংরক্ষিত।</p>
+        </div>
+    </footer>
+
+    <script>
+        // বায়ো লিংক ক্রিয়েটর টুলের জন্য JavaScript
+        class BioLinkCreator {
+            constructor() {
+                this.bioLinks = JSON.parse(localStorage.getItem('linkmaster_bio_links')) || [];
+                this.currentBioLink = this.getDefaultBioLink();
+                this.linkCounter = 1;
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.loadTheme();
+                this.updatePreview();
+            }
+
+            setupEventListeners() {
+                // প্রোফাইল ইমেজ হ্যান্ডলিং
+                document.getElementById('profileImage').addEventListener('change', (e) => this.handleImageUpload(e));
+                document.getElementById('removeImage').addEventListener('click', () => this.removeProfileImage());
+
+                // টেক্সট ইনপুটস
+                document.getElementById('profileName').addEventListener('input', () => this.updatePreview());
+                document.getElementById('profileBio').addEventListener('input', () => this.updatePreview());
+
+                // লিংক ম্যানেজমেন্ট
+                document.getElementById('addLinkBtn').addEventListener('click', () => this.addLinkItem());
+                document.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('remove-link-btn')) {
+                        this.removeLinkItem(e.target.closest('.link-item'));
+                    }
+                    if (e.target.classList.contains('move-up-btn')) {
+                        this.moveLinkUp(e.target.closest('.link-item'));
+                    }
+                    if (e.target.classList.contains('move-down-btn')) {
+                        this.moveLinkDown(e.target.closest('.link-item'));
+                    }
+                });
+
+                // লিংক ইনপুটস
+                document.addEventListener('input', (e) => {
+                    if (e.target.classList.contains('link-title') || e.target.classList.contains('link-url')) {
+                        this.updatePreview();
+                    }
+                });
+
+                // থিম সেটিংস
+                document.getElementById('primaryColor').addEventListener('input', () => this.updatePreview());
+                document.getElementById('backgroundColor').addEventListener('input', () => this.updatePreview());
+                document.getElementById('buttonStyle').addEventListener('change', () => this.updatePreview());
+
+                // সেভ বাটন
+                document.getElementById('saveBioLink').addEventListener('click', () => this.saveBioLink());
+
+                // শেয়ার অপশনস
+                document.getElementById('copyLinkBtn').addEventListener('click', () => this.copyBioLink());
+                document.getElementById('downloadQRBtn').addEventListener('click', () => this.downloadQRCode());
+                document.getElementById('shareSocialBtn').addEventListener('click', () => this.shareSocial());
+
+                // টেমপ্লেটস
+                document.querySelectorAll('.template-card').forEach(card => {
+                    card.addEventListener('click', (e) => {
+                        this.applyTemplate(e.currentTarget.dataset.template);
+                    });
+                });
+
+                // থিম টগল
+                document.getElementById('themeToggle').addEventListener('click', () => this.toggleTheme());
+            }
+
+            getDefaultBioLink() {
+                return {
+                    id: Date.now(),
+                    profileImage: null,
+                    name: 'আপনার নাম',
+                    bio: 'আপনার সংক্ষিপ্ত পরিচয় এখানে লিখুন...',
+                    links: [
+                        { title: 'নমুনা লিংক', url: 'https://example.com' }
+                    ],
+                    theme: {
+                        primaryColor: '#2563eb',
+                        backgroundColor: '#ffffff',
+                        buttonStyle: 'rounded'
+                    },
+                    createdAt: new Date().toLocaleString('bn-BD')
+                };
+            }
+
+            handleImageUpload(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        this.currentBioLink.profileImage = e.target.result;
+                        this.updatePreview();
+                        document.getElementById('removeImage').style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+
+            removeProfileImage() {
+                this.currentBioLink.profileImage = null;
+                document.getElementById('profileImage').value = '';
+                document.getElementById('removeImage').style.display = 'none';
+                this.updatePreview();
+            }
+
+            addLinkItem() {
+                const linksContainer = document.getElementById('linksContainer');
+                const newLinkId = this.linkCounter++;
+                
+                const linkItem = document.createElement('div');
+                linkItem.className = 'link-item';
+                linkItem.style.background = 'var(--bg-secondary)';
+                linkItem.style.padding = '1rem';
+                linkItem.style.borderRadius = '8px';
+     
