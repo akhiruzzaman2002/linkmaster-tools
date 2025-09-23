@@ -4,7 +4,350 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>লিংক ট্র্যাকার - LinkMaster</title>
-    <link rel="stylesheet" href="../style.css">
+    <style>
+        :root {
+            --primary-color: #3b82f6;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+            --bg-color: #ffffff;
+            --bg-secondary: #f8fafc;
+            --text-color: #1e293b;
+            --text-light: #64748b;
+            --border-color: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #60a5fa;
+            --secondary-color: #a78bfa;
+            --accent-color: #22d3ee;
+            --success-color: #34d399;
+            --error-color: #f87171;
+            --bg-color: #1e293b;
+            --bg-secondary: #334155;
+            --text-color: #f1f5f9;
+            --text-light: #94a3b8;
+            --border-color: #475569;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-secondary);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .navbar {
+            background-color: var(--bg-color);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            font-size: 1.8rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: var(--primary-color);
+        }
+
+        .theme-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: background-color 0.3s;
+        }
+
+        .theme-btn:hover {
+            background-color: var(--bg-secondary);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .section-header p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+        }
+
+        .footer {
+            background-color: var(--bg-color);
+            padding: 2rem;
+            text-align: center;
+            margin-top: 4rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .notification.success {
+            background-color: var(--success-color);
+        }
+
+        .notification.error {
+            background-color: var(--error-color);
+        }
+
+        .notification.info {
+            background-color: var(--primary-color);
+        }
+
+        /* মোডাল স্টাইল */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: var(--bg-color);
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: var(--shadow);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: var(--bg-secondary);
+            color: var(--text-color);
+        }
+
+        /* টুলটিপ স্টাইল */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            text-align: center;
+            border-radius: 6px;
+            padding: 0.5rem;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            box-shadow: var(--shadow);
+            font-size: 0.8rem;
+            font-weight: normal;
+        }
+
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* লোডিং স্টেট */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-menu {
+                gap: 1rem;
+            }
+
+            main {
+                padding: 0 1rem;
+            }
+
+            .overview-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .analytics-chart {
+                padding: 1rem;
+            }
+
+            .tracking-settings, .realtime-activity {
+                padding: 1rem;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .overview-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .section-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
 </head>
 <body>
@@ -71,7 +414,7 @@
             <div>
                 <!-- লিংক ম্যানেজমেন্ট -->
                 <div class="links-management" style="background: var(--bg-color); padding: 2rem; border-radius: 15px; box-shadow: var(--shadow); margin-bottom: 2rem;">
-                    <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 1.5rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                         <h3 style="color: var(--text-color);">📋 আপনার লিংকস</h3>
                         <button id="addTrackedLink" style="padding: 0.7rem 1.5rem; background: var(--primary-color); color: white; border: none; border-radius: 8px; cursor: pointer;">+ নতুন লিংক যোগ করুন</button>
                     </div>
@@ -102,7 +445,7 @@
                 <div class="analytics-chart" style="background: var(--bg-color); padding: 2rem; border-radius: 15px; box-shadow: var(--shadow);">
                     <h3 style="margin-bottom: 1.5rem; color: var(--text-color);">📈 ক্লিক ট্রেন্ড</h3>
                     <div id="clickChart" style="height: 300px; background: var(--bg-secondary); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--text-light);">
-                        <p>চার্ট ডেটা লোড হচ্ছে...</p>
+                        <canvas id="chartCanvas" width="400" height="250"></canvas>
                     </div>
                 </div>
             </div>
@@ -185,19 +528,19 @@
                 <div style="background: var(--bg-color); padding: 1.5rem; border-radius: 10px; border: 1px solid var(--border-color);">
                     <h4 style="margin-bottom: 1rem; color: var(--text-color);">🌍 ভিজিটর লোকেশন</h4>
                     <div id="geoData" style="font-size: 0.9rem;">
-                        <div style="display: flex; justify-content: between; margin-bottom: 0.5rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                             <span>বাংলাদেশ:</span>
                             <span style="font-weight: 600;">৬৫%</span>
                         </div>
-                        <div style="display: flex; justify-content: between; margin-bottom: 0.5rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                             <span>ভারত:</span>
                             <span style="font-weight: 600;">২০%</span>
                         </div>
-                        <div style="display: flex; justify-content: between; margin-bottom: 0.5rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                             <span>যুক্তরাষ্ট্র:</span>
                             <span style="font-weight: 600;">১০%</span>
                         </div>
-                        <div style="display: flex; justify-content: between;">
+                        <div style="display: flex; justify-content: space-between;">
                             <span>অন্যান্য:</span>
                             <span style="font-weight: 600;">৫%</span>
                         </div>
@@ -208,15 +551,15 @@
                 <div style="background: var(--bg-color); padding: 1.5rem; border-radius: 10px; border: 1px solid var(--border-color);">
                     <h4 style="margin-bottom: 1rem; color: var(--text-color);">📱 ডিভাইস তথ্য</h4>
                     <div id="deviceData" style="font-size: 0.9rem;">
-                        <div style="display: flex; justify-content: between; margin-bottom: 0.5rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                             <span>মোবাইল:</span>
                             <span style="font-weight: 600;">৭০%</span>
                         </div>
-                        <div style="display: flex; justify-content: between; margin-bottom: 0.5rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                             <span>ডেস্কটপ:</span>
                             <span style="font-weight: 600;">২৫%</span>
                         </div>
-                        <div style="display: flex; justify-content: between;">
+                        <div style="display: flex; justify-content: space-between;">
                             <span>ট্যাবলেট:</span>
                             <span style="font-weight: 600;">৫%</span>
                         </div>
@@ -227,15 +570,15 @@
                 <div style="background: var(--bg-color); padding: 1.5rem; border-radius: 10px; border: 1px solid var(--border-color);">
                     <h4 style="margin-bottom: 1rem; color: var(--text-color);">🔗 ট্র্যাফিক সোর্স</h4>
                     <div id="referralData" style="font-size: 0.9rem;">
-                        <div style="display: flex; justify-content: between; margin-bottom: 0.5rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                             <span>সোশ্যাল মিডিয়া:</span>
                             <span style="font-weight: 600;">৪০%</span>
                         </div>
-                        <div style="display: flex; justify-content: between; margin-bottom: 0.5rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                             <span>ডাইরেক্ট:</span>
                             <span style="font-weight: 600;">৩৫%</span>
                         </div>
-                        <div style="display: flex; justify-content: between;">
+                        <div style="display: flex; justify-content: space-between;">
                             <span>সার্চ ইঞ্জিন:</span>
                             <span style="font-weight: 600;">২৫%</span>
                         </div>
@@ -251,6 +594,32 @@
             <p>&copy; ২০২৪ LinkMaster. সকল অধিকার সংরক্ষিত।</p>
         </div>
     </footer>
+
+    <!-- মোডাল উইন্ডো -->
+    <div id="addLinkModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">নতুন লিংক যোগ করুন</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="linkUrl">লিংক URL</label>
+                <input type="url" id="linkUrl" class="form-input" placeholder="https://example.com">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="linkTitle">লিংক শিরোনাম (ঐচ্ছিক)</label>
+                <input type="text" id="linkTitle" class="form-input" placeholder="আমার লিংক">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="linkTags">ট্যাগস (কমা দ্বারা আলাদা করুন)</label>
+                <input type="text" id="linkTags" class="form-input" placeholder="marketing, social, campaign">
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary close-modal">বাতিল</button>
+                <button id="saveLink" class="btn btn-primary">লিংক সংরক্ষণ করুন</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         // লিংক ট্র্যাকিং টুলের জন্য JavaScript
@@ -269,11 +638,19 @@
                 this.loadLinksList();
                 this.loadSettings();
                 this.loadTheme();
+                this.renderChart();
             }
 
             setupEventListeners() {
                 // নতুন লিংক যোগ করুন
                 document.getElementById('addTrackedLink').addEventListener('click', () => this.showAddLinkModal());
+
+                // মোডাল ইভেন্টস
+                document.querySelectorAll('.close-modal').forEach(btn => {
+                    btn.addEventListener('click', () => this.hideAddLinkModal());
+                });
+                
+                document.getElementById('saveLink').addEventListener('click', () => this.saveNewLink());
 
                 // ফিল্টার এবং সর্ট
                 document.getElementById('searchLinks').addEventListener('input', (e) => this.filterLinks(e.target.value));
@@ -288,6 +665,13 @@
 
                 // থিম টগল
                 document.getElementById('themeToggle').addEventListener('click', () => this.toggleTheme());
+
+                // মোডাল বাইরে ক্লিক করলে বন্ধ হবে
+                document.getElementById('addLinkModal').addEventListener('click', (e) => {
+                    if (e.target.id === 'addLinkModal') {
+                        this.hideAddLinkModal();
+                    }
+                });
             }
 
             getDefaultSettings() {
@@ -315,19 +699,20 @@
             calculateUniqueVisitors() {
                 const visitors = new Set();
                 Object.values(this.trackingData).forEach(data => {
-                    data.visits.forEach(visit => {
-                        if (visit.visitorId) {
-                            visitors.add(visit.visitorId);
-                        }
-                    });
+                    if (data.visits) {
+                        data.visits.forEach(visit => {
+                            if (visit.visitorId) {
+                                visitors.add(visit.visitorId);
+                            }
+                        });
+                    }
                 });
                 return visitors.size;
             }
 
             calculateConversionRate() {
-                // সিম্পল কনভার্সন রেট ক্যালকুলেশন
                 const totalClicks = Object.values(this.trackingData).reduce((sum, data) => sum + data.clicks, 0);
-                const conversions = Object.values(this.trackingData).reduce((sum, data) => sum + data.conversions, 0);
+                const conversions = Object.values(this.trackingData).reduce((sum, data) => sum + (data.conversions || 0), 0);
                 
                 if (totalClicks === 0) return 0;
                 return Math.round((conversions / totalClicks) * 100);
@@ -352,4 +737,22 @@
                     const lastClick = trackingData.lastClick ? new Date(trackingData.lastClick).toLocaleDateString('bn-BD') : 'কোনো ক্লিক নেই';
 
                     return `
-                        <div class="link-item" style="background: var(--bg-secondary); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px so
+                        <div class="link-item" style="background: var(--bg-secondary); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid var(--primary-color);">
+                            <div style="display: flex; justify-content: space-between; align-items: start; gap: 1rem; margin-bottom: 0.5rem;">
+                                <div style="flex: 1;">
+                                    <strong style="color: var(--primary-color);">${link.shortUrl}</strong>
+                                    <div style="font-size: 0.9rem; color: var(--text-light); margin-top: 0.25rem;">
+                                        ${link.longUrl.length > 50 ? link.longUrl.substring(0, 50) + '...' : link.longUrl}
+                                    </div>
+                                </div>
+                                <span style="background: var(--bg-color); padding: 0.25rem 0.5rem; border-radius: 5px; font-size: 0.8rem;">
+                                    ${trackingData.clicks} ক্লিক
+                                </span>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; font-size: 0.8rem; color: var(--text-light);">
+                                <span>তৈরি: ${link.createdAt}</span>
+                                <span>শেষ ক্লিক: ${lastClick}</span>
+                                <span>কনভার্সন: ${trackingData.conversions || 0}</span>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                                <button onclick="linkTracker.viewAnalytics('${link.id}')" style="padding: 0.3rem 0.7rem; background: var(--primary-color); color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 0.7rem;">এনালিটিক্স</button>
