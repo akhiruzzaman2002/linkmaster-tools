@@ -70,7 +70,7 @@
 
                     <!-- লিংক সেকশন -->
                     <div class="links-section">
-                        <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
                             <h4 style="color: var(--text-color);">🔗 লিংকস</h4>
                             <button id="addLinkBtn" style="padding: 0.5rem 1rem; background: var(--primary-color); color: white; border: none; border-radius: 5px; cursor: pointer;">+ লিংক যোগ করুন</button>
                         </div>
@@ -151,10 +151,10 @@
                     <div id="bioPreview" style="background: white; border-radius: 20px; padding: 2rem; box-shadow: 0 10px 30px rgba(0,0,0,0.1); min-height: 600px; border: 1px solid var(--border-color);">
                         <!-- প্রোফাইল হেডার -->
                         <div style="text-align: center; margin-bottom: 2rem;">
-                            <img id="previewImage" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23%23e5e7eb'/%3E%3Ctext x='50' y='60' text-anchor='middle' font-size='40' fill='%23%239ca3af'%3E👤%3C/text%3E%3C/svg%3E" 
+                            <img id="previewImage" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23e5e7eb'/%3E%3Ctext x='50' y='60' text-anchor='middle' font-size='40' fill='%239ca3af'%3E👤%3C/text%3E%3C/svg%3E" 
                                  alt="Profile" style="width: 100px; height: 100px; border-radius: 50%; margin-bottom: 1rem; border: 3px solid #2563eb;">
                             <h2 id="previewName" style="color: #1f2937; margin-bottom: 0.5rem;">আপনার নাম</h2>
-                            <p id="previewBio" style="color: #6b7280; line-height: 1.5;">আপনার সংক্ষিপ্ত পরিচয় এখাবে দেখানো হবে</p>
+                            <p id="previewBio" style="color: #6b7280; line-height: 1.5;">আপনার সংক্ষিপ্ত পরিচয় এখানে দেখানো হবে</p>
                         </div>
 
                         <!-- লিংক বাটনস -->
@@ -324,4 +324,291 @@
                 linkItem.style.background = 'var(--bg-secondary)';
                 linkItem.style.padding = '1rem';
                 linkItem.style.borderRadius = '8px';
-     
+                linkItem.style.marginBottom = '1rem';
+                
+                linkItem.innerHTML = `
+                    <div style="display: grid; gap: 1rem;">
+                        <div>
+                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-color);">লিংক টাইটেল</label>
+                            <input type="text" class="link-title" placeholder="যেমন: আমার ওয়েবসাইট" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: 8px;">
+                        </div>
+                        
+                        <div>
+                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-color);">URL</label>
+                            <input type="url" class="link-url" placeholder="https://example.com" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: 8px;">
+                        </div>
+                        
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="move-up-btn" style="padding: 0.5rem; background: var(--accent-color); color: white; border: none; border-radius: 5px; cursor: pointer;">⬆️</button>
+                            <button class="move-down-btn" style="padding: 0.5rem; background: var(--accent-color); color: white; border: none; border-radius: 5px; cursor: pointer;">⬇️</button>
+                            <button class="remove-link-btn" style="padding: 0.5rem; background: var(--error-color); color: white; border: none; border-radius: 5px; cursor: pointer;">🗑️</button>
+                        </div>
+                    </div>
+                `;
+                
+                linksContainer.appendChild(linkItem);
+                
+                // নতুন লিংক যোগ করুন
+                this.currentBioLink.links.push({ title: '', url: '' });
+                this.updatePreview();
+            }
+
+            removeLinkItem(linkItem) {
+                const index = Array.from(linkItem.parentNode.children).indexOf(linkItem);
+                if (index !== -1) {
+                    this.currentBioLink.links.splice(index, 1);
+                    linkItem.remove();
+                    this.updatePreview();
+                }
+            }
+
+            moveLinkUp(linkItem) {
+                const index = Array.from(linkItem.parentNode.children).indexOf(linkItem);
+                if (index > 0) {
+                    const prevItem = linkItem.previousElementSibling;
+                    linkItem.parentNode.insertBefore(linkItem, prevItem);
+                    
+                    // অ্যারেতে সরান
+                    const temp = this.currentBioLink.links[index];
+                    this.currentBioLink.links[index] = this.currentBioLink.links[index - 1];
+                    this.currentBioLink.links[index - 1] = temp;
+                    
+                    this.updatePreview();
+                }
+            }
+
+            moveLinkDown(linkItem) {
+                const index = Array.from(linkItem.parentNode.children).indexOf(linkItem);
+                if (index < linkItem.parentNode.children.length - 1) {
+                    const nextItem = linkItem.nextElementSibling;
+                    linkItem.parentNode.insertBefore(nextItem, linkItem);
+                    
+                    // অ্যারেতে সরান
+                    const temp = this.currentBioLink.links[index];
+                    this.currentBioLink.links[index] = this.currentBioLink.links[index + 1];
+                    this.currentBioLink.links[index + 1] = temp;
+                    
+                    this.updatePreview();
+                }
+            }
+
+            updatePreview() {
+                // প্রোফাইল তথ্য আপডেট করুন
+                const name = document.getElementById('profileName').value || 'আপনার নাম';
+                const bio = document.getElementById('profileBio').value || 'আপনার সংক্ষিপ্ত পরিচয় এখানে লিখুন...';
+                
+                document.getElementById('previewName').textContent = name;
+                document.getElementById('previewBio').textContent = bio;
+                
+                // প্রোফাইল ছবি আপডেট করুন
+                if (this.currentBioLink.profileImage) {
+                    document.getElementById('previewImage').src = this.currentBioLink.profileImage;
+                }
+                
+                // থিম আপডেট করুন
+                const primaryColor = document.getElementById('primaryColor').value;
+                const backgroundColor = document.getElementById('backgroundColor').value;
+                
+                document.getElementById('bioPreview').style.background = backgroundColor;
+                document.getElementById('previewImage').style.borderColor = primaryColor;
+                
+                // লিংকস আপডেট করুন
+                this.updatePreviewLinks();
+            }
+
+            updatePreviewLinks() {
+                const previewLinks = document.getElementById('previewLinks');
+                previewLinks.innerHTML = '';
+                
+                const linkItems = document.querySelectorAll('.link-item');
+                linkItems.forEach((item, index) => {
+                    const titleInput = item.querySelector('.link-title');
+                    const urlInput = item.querySelector('.link-url');
+                    
+                    const title = titleInput.value || 'নমুনা লিংক';
+                    const url = urlInput.value || 'example.com';
+                    
+                    const linkButton = document.createElement('a');
+                    linkButton.href = url.startsWith('http') ? url : 'https://' + url;
+                    linkButton.target = '_blank';
+                    linkButton.className = 'link-button';
+                    linkButton.style.cssText = `
+                        background: ${document.getElementById('primaryColor').value};
+                        color: white;
+                        padding: 1rem;
+                        border-radius: 12px;
+                        text-align: center;
+                        text-decoration: none;
+                        display: block;
+                        transition: all 0.3s;
+                        cursor: pointer;
+                    `;
+                    
+                    linkButton.innerHTML = `
+                        <strong>${title}</strong>
+                        <div style="font-size: 0.8rem; opacity: 0.8;">${this.extractDomain(url)}</div>
+                    `;
+                    
+                    previewLinks.appendChild(linkButton);
+                });
+            }
+
+            extractDomain(url) {
+                try {
+                    const domain = new URL(url.startsWith('http') ? url : 'https://' + url).hostname;
+                    return domain.replace('www.', '');
+                } catch {
+                    return url;
+                }
+            }
+
+            saveBioLink() {
+                // লিংক ডেটা সংগ্রহ করুন
+                const linkItems = document.querySelectorAll('.link-item');
+                this.currentBioLink.links = [];
+                
+                linkItems.forEach(item => {
+                    const title = item.querySelector('.link-title').value;
+                    const url = item.querySelector('.link-url').value;
+                    
+                    if (title && url) {
+                        this.currentBioLink.links.push({ title, url });
+                    }
+                });
+                
+                // থিম ডেটা সংগ্রহ করুন
+                this.currentBioLink.theme = {
+                    primaryColor: document.getElementById('primaryColor').value,
+                    backgroundColor: document.getElementById('backgroundColor').value,
+                    buttonStyle: document.getElementById('buttonStyle').value
+                };
+                
+                // প্রোফাইল ডেটা সংগ্রহ করুন
+                this.currentBioLink.name = document.getElementById('profileName').value || 'আপনার নাম';
+                this.currentBioLink.bio = document.getElementById('profileBio').value || 'আপনার সংক্ষিপ্ত পরিচয়...';
+                this.currentBioLink.updatedAt = new Date().toLocaleString('bn-BD');
+                
+                // লোকাল স্টোরেজে সেভ করুন
+                const existingIndex = this.bioLinks.findIndex(link => link.id === this.currentBioLink.id);
+                if (existingIndex !== -1) {
+                    this.bioLinks[existingIndex] = this.currentBioLink;
+                } else {
+                    this.bioLinks.unshift(this.currentBioLink);
+                }
+                
+                localStorage.setItem('linkmaster_bio_links', JSON.stringify(this.bioLinks));
+                this.showNotification('বায়ো লিংক সফলভাবে সেভ করা হয়েছে!', 'success');
+            }
+
+            copyBioLink() {
+                // সিমুলেট করা - আসলে একটি শেয়ারযোগ্য URL তৈরি করতে হবে
+                this.showNotification('বায়ো লিংক লিংক কপি করা হয়েছে!', 'success');
+            }
+
+            downloadQRCode() {
+                // সিমুলেট করা - আসলে QR কোড তৈরি করতে হবে
+                this.showNotification('QR কোড ডাউনলোড করা হয়েছে!', 'success');
+            }
+
+            shareSocial() {
+                if (navigator.share) {
+                    navigator.share({
+                        title: `${this.currentBioLink.name} - বায়ো লিংক`,
+                        text: this.currentBioLink.bio,
+                        url: window.location.href
+                    });
+                } else {
+                    this.showNotification('শেয়ার অপশন শীঘ্রই আসছে!', 'info');
+                }
+            }
+
+            applyTemplate(templateName) {
+                const templates = {
+                    'modern': { primaryColor: '#667eea', backgroundColor: '#ffffff', buttonStyle: 'rounded' },
+                    'minimal': { primaryColor: '#f093fb', backgroundColor: '#f8fafc', buttonStyle: 'square' },
+                    'dark': { primaryColor: '#2c3e50', backgroundColor: '#1a202c', buttonStyle: 'rounded' }
+                };
+                
+                const template = templates[templateName];
+                if (template) {
+                    document.getElementById('primaryColor').value = template.primaryColor;
+                    document.getElementById('backgroundColor').value = template.backgroundColor;
+                    document.getElementById('buttonStyle').value = template.buttonStyle;
+                    this.updatePreview();
+                    this.showNotification(`${templateName} টেমপ্লেট প্রয়োগ করা হয়েছে!`, 'success');
+                }
+            }
+
+            showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    padding: 1rem 1.5rem;
+                    border-radius: 8px;
+                    color: white;
+                    z-index: 1000;
+                    max-width: 300px;
+                    animation: slideIn 0.3s ease;
+                    font-weight: 500;
+                    background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
+                `;
+                notification.textContent = message;
+                document.body.appendChild(notification);
+
+                setTimeout(() => {
+                    notification.style.animation = 'slideOut 0.3s ease';
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.parentNode.removeChild(notification);
+                        }
+                    }, 300);
+                }, 3000);
+
+                this.addNotificationStyles();
+            }
+
+            addNotificationStyles() {
+                if (!document.getElementById('notification-styles')) {
+                    const style = document.createElement('style');
+                    style.id = 'notification-styles';
+                    style.textContent = `
+                        @keyframes slideIn {
+                            from { transform: translateX(100%); opacity: 0; }
+                            to { transform: translateX(0); opacity: 1; }
+                        }
+                        @keyframes slideOut {
+                            from { transform: translateX(0); opacity: 1; }
+                            to { transform: translateX(100%); opacity: 0; }
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+            }
+
+            toggleTheme() {
+                const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('linkmaster_theme', newTheme);
+                
+                const themeBtn = document.getElementById('themeToggle');
+                themeBtn.textContent = newTheme === 'light' ? '🌙' : '☀️';
+            }
+
+            loadTheme() {
+                const savedTheme = localStorage.getItem('linkmaster_theme') || 'light';
+                document.documentElement.setAttribute('data-theme', savedTheme);
+                const themeBtn = document.getElementById('themeToggle');
+                themeBtn.textContent = savedTheme === 'light' ? '🌙' : '☀️';
+            }
+        }
+
+        // অ্যাপ্লিকেশন শুরু করুন
+        document.addEventListener('DOMContentLoaded', function() {
+            new BioLinkCreator();
+        });
+    </script>
+</body>
+</html>
