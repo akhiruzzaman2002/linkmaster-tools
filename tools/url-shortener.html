@@ -407,4 +407,54 @@
                 if (!document.getElementById('notification-styles')) {
                     const style = document.createElement('style');
                     style.id = 'notification-styles';
-                    style.t
+                    style.textContent = `
+                        @keyframes slideIn {
+                            from { transform: translateX(100%); opacity: 0; }
+                            to { transform: translateX(0); opacity: 1; }
+                        }
+                        @keyframes slideOut {
+                            from { transform: translateX(0); opacity: 1; }
+                            to { transform: translateX(100%); opacity: 0; }
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+            }
+
+            showLoadingState() {
+                const button = document.getElementById('shortenBtn');
+                button.textContent = 'শর্টেন হচ্ছে...';
+                button.disabled = true;
+            }
+
+            hideLoadingState() {
+                const button = document.getElementById('shortenBtn');
+                button.textContent = 'শর্টেন করুন';
+                button.disabled = false;
+            }
+
+            toggleTheme() {
+                const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('linkmaster_theme', newTheme);
+                
+                const themeBtn = document.getElementById('themeToggle');
+                themeBtn.textContent = newTheme === 'light' ? '🌙' : '☀️';
+            }
+
+            loadTheme() {
+                const savedTheme = localStorage.getItem('linkmaster_theme') || 'light';
+                document.documentElement.setAttribute('data-theme', savedTheme);
+                const themeBtn = document.getElementById('themeToggle');
+                themeBtn.textContent = savedTheme === 'light' ? '🌙' : '☀️';
+            }
+        }
+
+        // অ্যাপ্লিকেশন শুরু করুন
+        document.addEventListener('DOMContentLoaded', function() {
+            new URLShortenerTool();
+        });
+    </script>
+</body>
+</html>
