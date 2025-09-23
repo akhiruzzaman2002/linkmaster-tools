@@ -442,4 +442,40 @@ body {
     .tools-grid {
         grid-template-columns: 1fr;
     }
-      }
+    
+    .section-header h2 {
+        font-size: 2rem;
+    }
+    
+    .tool-card {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-section {
+        padding: 2rem 1rem;
+    }
+    
+    .hero-title {
+        font-size: 1.8rem;
+    }
+    
+    .tools-section {
+        padding: 2rem 1rem;
+    }
+    
+    .nav-container {
+        padding: 1rem;
+    }
+    
+    .url-actions {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .btn-copy, .btn-qr, .btn-share, .btn-save {
+        width: 100%;
+        margin: 0.2rem 0;
+    }
+        }
