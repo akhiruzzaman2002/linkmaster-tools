@@ -74,16 +74,16 @@
                 </div>
             </div>
             
-            <div id="shortUrlResult" class="result-box" style="background: var(--bg-secondary);">
+            <div id="shortUrlResult" class="result-box" style="display: none; background: var(--bg-secondary); padding: 1.5rem; border-radius: 10px; margin-top: 1.5rem;">
                 <div class="short-url">
                     <span id="shortUrl" class="short-url-text" style="color: var(--text-color);">https://lnkmstr.com/abc123</span>
-                    <button id="copyBtn" class="btn-copy" style="background: var(--primary-color); color: white;">কপি</button>
+                    <button id="copyBtn" class="btn-copy" style="background: var(--primary-color); color: white; padding: 0.5rem 1rem; border: none; border-radius: 5px; cursor: pointer;">কপি</button>
                 </div>
-                <div class="url-actions">
-                    <button id="qrBtn" class="btn-qr" style="background: var(--secondary-color); color: white;">QR কোড</button>
-                    <button id="shareBtn" class="btn-share" style="background: var(--accent-color); color: white;">শেয়ার</button>
-                    <button id="saveBtn" class="btn-save" style="background: #10b981; color: white;">সেভ করুন</button>
-                    <button id="analyticsBtn" class="btn-analytics" style="background: #f59e0b; color: white;">এনালিটিক্স</button>
+                <div class="url-actions" style="display: flex; gap: 0.5rem; margin-top: 1rem; justify-content: center;">
+                    <button id="qrBtn" class="btn-qr" style="background: var(--secondary-color); color: white; padding: 0.5rem 1rem; border: none; border-radius: 5px; cursor: pointer;">QR কোড</button>
+                    <button id="shareBtn" class="btn-share" style="background: var(--accent-color); color: white; padding: 0.5rem 1rem; border: none; border-radius: 5px; cursor: pointer;">শেয়ার</button>
+                    <button id="saveBtn" class="btn-save" style="background: #10b981; color: white; padding: 0.5rem 1rem; border: none; border-radius: 5px; cursor: pointer;">সেভ করুন</button>
+                    <button id="analyticsBtn" class="btn-analytics" style="background: #f59e0b; color: white; padding: 0.5rem 1rem; border: none; border-radius: 5px; cursor: pointer;">এনালিটিক্স</button>
                 </div>
             </div>
         </div>
@@ -306,6 +306,9 @@
                 const shortUrl = document.getElementById('shortUrl').textContent;
                 navigator.clipboard.writeText(shortUrl).then(() => {
                     this.showNotification('লিংক কপি করা হয়েছে!', 'success');
+                }).catch(err => {
+                    this.showNotification('কপি করতে সমস্যা হয়েছে', 'error');
+                    console.error('Copy failed:', err);
                 });
             }
 
@@ -324,6 +327,7 @@
                     });
                 } else {
                     this.copyToClipboard();
+                    this.showNotification('লিংক কপি করা হয়েছে! শেয়ার করতে পেস্ট করুন।', 'info');
                 }
             }
 
@@ -337,7 +341,7 @@
 
             loadRecentLinks() {
                 const recentLinksList = document.getElementById('recentLinksList');
-                const recentLinks = this.links.slice(0, 5); // শেষের ৫টি লিংক
+                const recentLinks = this.links.slice(0, 5);
 
                 if (recentLinks.length === 0) {
                     recentLinksList.innerHTML = `
@@ -350,7 +354,7 @@
 
                 recentLinksList.innerHTML = recentLinks.map(link => `
                     <div style="border: 1px solid var(--border-color); border-radius: 10px; padding: 1rem; margin-bottom: 1rem; background: var(--bg-color);">
-                        <div style="display: flex; justify-content: between; align-items: start; gap: 1rem; margin-bottom: 0.5rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: start; gap: 1rem; margin-bottom: 0.5rem;">
                             <div style="flex: 1;">
                                 <strong style="color: var(--primary-color);">${link.shortUrl}</strong>
                                 <div style="font-size: 0.9rem; color: var(--text-light); margin-top: 0.25rem;">
@@ -388,38 +392,19 @@
                 document.body.appendChild(notification);
 
                 setTimeout(() => {
-                    notification.remove();
+                    notification.style.animation = 'slideOut 0.3s ease';
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.parentNode.removeChild(notification);
+                        }
+                    }, 300);
                 }, 3000);
+
+                this.addNotificationStyles();
             }
 
-            showLoadingState() {
-                const button = document.getElementById('shortenBtn');
-                button.textContent = 'শর্টেন হচ্ছে...';
-                button.disabled = true;
-            }
-
-            hideLoadingState() {
-                const button = document.getElementById('shortenBtn');
-                button.textContent = 'শর্টেন করুন';
-                button.disabled = false;
-            }
-
-            toggleTheme() {
-                const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
-                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-                document.documentElement.setAttribute('data-theme', newTheme);
-                localStorage.setItem('linkmaster_theme', newTheme);
-                
-                const themeBtn = document.getElementById('themeToggle');
-                themeBtn.textContent = newTheme === 'light' ? '🌙' : '☀️';
-            }
-
-            loadTheme() {
-                const savedTheme = localStorage.getItem('linkmaster_theme') || 'light';
-                document.documentElement.setAttribute('data-theme', savedTheme);
-                const themeBtn = document.getElementById('themeToggle');
-                themeBtn.textContent = savedTheme === 'light' ? '🌙' : '☀️';
-            }
-        }
-
-     
+            addNotificationStyles() {
+                if (!document.getElementById('notification-styles')) {
+                    const style = document.createElement('style');
+                    style.id = 'notification-styles';
+                    style.t
